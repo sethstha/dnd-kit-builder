@@ -14,11 +14,18 @@ interface Props {
 
 const SortableContainer: React.FC<Props> = (props) => {
   const { contents, children, name, id } = props;
-  const { setNodeRef, attributes, listeners, transform, transition } =
-    useSortable({ id: id });
+  const {
+    isDragging,
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+  } = useSortable({ id: id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
+    zIndex: isDragging ? 999 : 'initial',
     transition,
   };
 

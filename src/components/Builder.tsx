@@ -1,8 +1,17 @@
 import { Box, Container, Stack } from '@chakra-ui/react';
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
+  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import React, { useState } from 'react';
@@ -11,6 +20,12 @@ import SortableContainer from './SortableContainer';
 
 const Builder = () => {
   const [containers, setContainers] = useState<Container[]>(fakeData);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -70,7 +85,7 @@ const Builder = () => {
   return (
     <Box bg="gray.100" minH={'100vh'} pt="8">
       <Container maxW={'container.xl'}>
-        <DndContext onDragEnd={onDragEnd}>
+        <DndContext sensors={sensors} onDragEnd={onDragEnd}>
           <Stack direction="column" spacing="4">
             <SortableContext
               id={'container'}
