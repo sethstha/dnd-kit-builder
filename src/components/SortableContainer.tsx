@@ -1,4 +1,4 @@
-import { Center, Heading, Icon, Stack } from '@chakra-ui/react';
+import { Box, Center, Heading, Icon, Stack } from '@chakra-ui/react';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { IconDragDrop2 } from '@tabler/icons-react';
 import React from 'react';

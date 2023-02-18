@@ -1,6 +1,5 @@
-import { Box, Container, Stack } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Link, Stack } from '@chakra-ui/react';
 import {
-  closestCenter,
   DndContext,
   DragEndEvent,
   KeyboardSensor,
@@ -14,11 +13,12 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { IconBrandGithub } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { fakeData } from '../data/data';
 import SortableContainer from './SortableContainer';
 
-const Builder = () => {
+const Builder: React.FC = () => {
   const [containers, setContainers] = useState<Container[]>(fakeData);
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -83,10 +83,28 @@ const Builder = () => {
   };
 
   return (
-    <Box bg="gray.100" minH={'100vh'} pt="8">
+    <Stack direction="column" bg="gray.100" align="center" spacing="8" pb="8">
+      <Box as="header" bg="white" w="full" py="4">
+        <Container maxW={'container.xl'}>
+          <Stack
+            direction="row"
+            justify="space-between"
+            align="center"
+            height="6">
+            <Heading fontSize="md">
+              React.js, TypeScript and @dnd-kit course builder
+            </Heading>
+            <Link
+              target="_blank"
+              href="https://github.com/sethstha/dnd-kit-builder">
+              <Button leftIcon={<IconBrandGithub />}>Github</Button>
+            </Link>
+          </Stack>
+        </Container>
+      </Box>
       <Container maxW={'container.xl'}>
         <DndContext sensors={sensors} onDragEnd={onDragEnd}>
-          <Stack direction="column" spacing="4">
+          <Stack direction="column" spacing="8">
             <SortableContext
               id={'container'}
               items={containers}
@@ -103,7 +121,7 @@ const Builder = () => {
           </Stack>
         </DndContext>
       </Container>
-    </Box>
+    </Stack>
   );
 };
 
