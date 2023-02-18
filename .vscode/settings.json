@@ -1,0 +1,14 @@
+{
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.preferences.jsxAttributeCompletionStyle": "braces",
+  "javascript.preferences.jsxAttributeCompletionStyle": "braces",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.eol": "\n"
+}
