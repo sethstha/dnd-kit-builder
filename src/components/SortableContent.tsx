@@ -12,12 +12,19 @@ interface Props {
 
 const SortableContent: React.FC<Props> = (props) => {
   const { children, name, id } = props;
-  const { setNodeRef, attributes, listeners, transform, transition } =
-    useSortable({ id: id });
+  const {
+    isDragging,
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+  } = useSortable({ id: id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 9999 : 'initial',
   };
   return (
     <Stack

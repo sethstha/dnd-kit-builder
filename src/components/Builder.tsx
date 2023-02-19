@@ -1,7 +1,10 @@
 import { Box, Button, Container, Heading, Link, Stack } from '@chakra-ui/react';
 import {
+  closestCorners,
   DndContext,
   DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -17,9 +20,11 @@ import { IconBrandGithub } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { fakeData } from '../data/data';
 import SortableContainer from './SortableContainer';
+import SortableContent from './SortableContent';
 
 const Builder: React.FC = () => {
   const [containers, setContainers] = useState<Container[]>(fakeData);
+  const [activeId, setActiveId] = useState<string | number | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -70,16 +75,25 @@ const Builder: React.FC = () => {
               newIndex
             );
 
-            const tempContainers = [...containers];
-            tempContainers[currentContainerIndex].contents = newContents;
+            const filteredContainers = containers.map((container, index) => {
+              if (index === currentContainerIndex) {
+                return { ...container, contents: newContents };
+              }
 
-            setContainers(tempContainers);
+              return container;
+            });
+
+            setContainers(filteredContainers);
           }
         }
       } catch (error) {
         console.log(error);
       }
     }
+  };
+
+  const onDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id);
   };
 
   return (
@@ -103,7 +117,11 @@ const Builder: React.FC = () => {
         </Container>
       </Box>
       <Container maxW={'container.xl'}>
-        <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+        <DndContext
+          sensors={sensors}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          collisionDetection={closestCorners}>
           <Stack direction="column" spacing="8">
             <SortableContext
               id={'container'}
@@ -119,6 +137,11 @@ const Builder: React.FC = () => {
               ))}
             </SortableContext>
           </Stack>
+          <DragOverlay>
+            {activeId ? (
+              <SortableContent id={activeId} name="isdragging" />
+            ) : null}
+          </DragOverlay>
         </DndContext>
       </Container>
     </Stack>

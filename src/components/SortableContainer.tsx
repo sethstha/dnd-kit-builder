@@ -4,6 +4,7 @@ import { IconDragDrop2 } from '@tabler/icons-react';
 import React from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import SortableContent from './SortableContent';
+import { useDroppable } from '@dnd-kit/core';
 
 interface Props {
   contents: Content[];
@@ -12,6 +13,20 @@ interface Props {
   id: string | number;
 }
 
+const DroppableContainer: React.FC<{
+  id: string | number;
+  children: React.ReactNode;
+}> = ({ id, children }) => {
+  const { setNodeRef } = useDroppable({
+    id: id,
+  });
+
+  return (
+    <Box bg="white" p="8" ref={setNodeRef}>
+      {children}
+    </Box>
+  );
+};
 const SortableContainer: React.FC<Props> = (props) => {
   const { contents, children, name, id } = props;
   const {
@@ -32,8 +47,6 @@ const SortableContainer: React.FC<Props> = (props) => {
   return (
     <Stack
       direction="column"
-      bg="white"
-      p="8"
       spacing="6"
       ref={setNodeRef}
       {...attributes}
@@ -45,15 +58,17 @@ const SortableContainer: React.FC<Props> = (props) => {
         <Heading fontSize={'xl'}>{name}</Heading>
       </Stack>
       <SortableContext items={contents} id={'content'}>
-        <Stack direction={'column'} spacing="2">
-          {contents.map((content) => (
-            <SortableContent
-              key={content.id}
-              id={content.id}
-              name={content.name}
-            />
-          ))}
-        </Stack>
+        <DroppableContainer id={'box'}>
+          <Stack direction={'column'} spacing="2">
+            {contents.map((content) => (
+              <SortableContent
+                key={content.id}
+                id={content.id}
+                name={content.name}
+              />
+            ))}
+          </Stack>
+        </DroppableContainer>
       </SortableContext>
       {children}
     </Stack>
